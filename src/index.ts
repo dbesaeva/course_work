@@ -1,7 +1,7 @@
 import TaskManager from './task-manager';
-import CookieManager from './cookie-manager';
 import TaskCollection from './task-collection';
 import getStorage from './storage';
+import TaskDomInterface from './task-dom-interface';
 
 let taskDomElements = {
     appList: document.getElementById('app__list'),
@@ -23,14 +23,16 @@ let addNewTaskField = document.getElementById('app__task-new');
 init();
 
 addNewTaskField.addEventListener('keyup', function (e) {
+    let self = (this as HTMLInputElement);
+
     if (e.keyCode === 13) {
-        taskManager.addTask(this.value);
-        this.value = '';
+        taskManager.addTask(self.value);
+        self.value = '';
     }
 });
 
 
-function init() {
+function init(): void {
     let currentTasks = tasks.filter(task => task.state === 'current');
     let doneTasks = tasks.filter(task => task.state === 'done');
 
@@ -40,6 +42,7 @@ function init() {
     for (const item of doneTasks) {
         taskManager.createItem(item);
     }
-    taskDomElements.all.innerHTML = taskCollection.getAllTasksCount();
-    taskDomElements.done.innerHTML = taskCollection.getDoneTasksCount();
+
+    (taskDomElements as TaskDomInterface).all.innerHTML = String(taskCollection.getAllTasksCount());
+    (taskDomElements as TaskDomInterface).done.innerHTML = String(taskCollection.getDoneTasksCount());
 }

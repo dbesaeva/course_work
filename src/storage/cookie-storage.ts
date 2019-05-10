@@ -1,11 +1,11 @@
 import ArrayStorage from './array-storage';
+import CookieManager from '../cookie-manager';
 
-let TASKS = null;
+let TASKS: any = null;
 
 export default class CookieStorage extends ArrayStorage {
-    constructor(cookieManager) {
+    constructor(private cookieManager: CookieManager) {
         super();
-        this.cookieManager = cookieManager;
     }
 
     getAll() {
@@ -17,24 +17,24 @@ export default class CookieStorage extends ArrayStorage {
         return this.tasks;
     }
 
-    create(str) {
+    create(str: any) {
         let task = super.create(str);
         this.updateCookie();
 
         return task;
     }
 
-    remove(id) {
+    remove(id: any) {
         super.remove(id);
         this.updateCookie();
     }
 
-    done(id) {
+    done(id: any) {
         super.done(id);
         this.updateCookie();
     }
 
-    updateCookie() {
+    updateCookie(): void {
         this.cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
     }
 }

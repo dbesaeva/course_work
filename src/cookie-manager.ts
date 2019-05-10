@@ -1,11 +1,5 @@
 export default class CookieManager {
-    /**
-     * @param {String} name 
-     * @param {String} value 
-     * @param {Object} options
-     * @return {void}
-     */
-    setCookie(name, value, options) {
+    setCookie(name: string, value: string, options: any): void {
         options = options || {};
 
         var expires = options.expires;
@@ -38,32 +32,20 @@ export default class CookieManager {
         document.cookie = updatedCookie;
     }
 
-    /**
-     * @param {String} name
-     * @return {void}
-     */
-    deleteCookie(name) {
+    deleteCookie(name: string): void {
         this.setCookie(name, '', {
             expires: -1
         });
     }
 
-    /**
-     * @param {String} name
-     * @return {String}
-     */
-    getCookie(name) {
+    getCookie(name: string): string {
         var matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
-    /**
-     * @param {String} name
-     * @return {Boolean}
-     */
-    hasCookie(name) {
+    hasCookie(name: string): boolean {
         return this.getCookie(name) !== undefined;
     }
 }

@@ -3,11 +3,7 @@ import ArrayStorage from './storage/array-storage';
 import CookieStorage from './storage/cookie-storage';
 import StorageContract from './storage/storage-contract';
 
-/**
- * @param {String} storageType
- * @return {StorageContract} 
- */
-export default function getStorage(storageType) {
+export default function getStorage(storageType: string): StorageContract {
     switch (storageType) {
         case 'array':
             return new ArrayStorage();

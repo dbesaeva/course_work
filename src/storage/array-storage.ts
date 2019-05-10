@@ -1,15 +1,16 @@
 import Task from '../task';
 import StorageContract from './storage-contract';
 
-let TASKS = null;
+let TASKS: any = null;
 
-export default class ArrayStorage extends StorageContract {
+export default class ArrayStorage implements StorageContract {
+    protected tasks: Array<Task>;
+
     constructor() {
-        super();
         this.tasks = [];
     }
 
-    getAll() {
+    getAll(): Array<Task> {
         if (null === TASKS) {
             TASKS = [
                 new Task(this.doId(), 'Задача 1', 'current'),
@@ -23,21 +24,18 @@ export default class ArrayStorage extends StorageContract {
         return this.tasks;
     }
 
-    /**
-     * @return {String}
-     */
-    doId() {
+    doId(): string {
         return Math.random().toString(36).substr(2, 16);
     }
 
-    create(str) {
+    create(str: any): Task {
         const task = new Task(this.doId(), str, 'current');
         this.tasks.push(task);
 
         return task;
     }
 
-    remove(id) {
+    remove(id: any): void {
         for (const [index, item] of this.tasks.entries()) {
             if (item.id !== id) {
                 continue;
@@ -47,7 +45,7 @@ export default class ArrayStorage extends StorageContract {
         }
     }
 
-    done(id) {
+    done(id: any): void {
         for (const [index, item] of this.tasks.entries()) {
             if (item.id !== id) {
                 continue;
@@ -57,5 +55,3 @@ export default class ArrayStorage extends StorageContract {
         }
     }
 }
-
-ArrayStorage.TASKS = [];

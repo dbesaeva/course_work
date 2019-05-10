@@ -1,14 +1,18 @@
 import Task from './task';
 import TaskCollection from './task-collection';
 import StorageContract from './storage/storage-contract';
+import TaskDomInterface from './task-dom-interface';
 
 export default class TaskManager {
 
-    /**
-     * @param {Object} taskDomElements 
-     * @param {StorageContract} storage
-     */
-    constructor(taskDomElements, storage) {
+    private tasksListDomEl: HTMLElement;
+    private allTasksDomEl: HTMLElement;
+    private doneTasksDomEl: HTMLElement;
+    private tasks: Array<Task>;
+    private storage: StorageContract;
+    private taskCollection: TaskCollection;
+
+    constructor(taskDomElements: TaskDomInterface, storage: StorageContract) {
         this.tasksListDomEl = taskDomElements.appList;
         this.allTasksDomEl = taskDomElements.all;
         this.doneTasksDomEl = taskDomElements.done;
@@ -16,20 +20,12 @@ export default class TaskManager {
         this.storage = storage;
     }
 
-    /**
-     * @param {TaskCollection} taskCollection
-     * @return {void}
-     */
-    setTaskCollection(taskCollection) {
+    setTaskCollection(taskCollection: TaskCollection): void {
         this.tasks = taskCollection.getTasks();
         this.taskCollection = taskCollection;
     }
 
-    /**
-     * @param {Task} el
-     * @return {void} 
-     */
-    createItem(el) {
+    createItem(el: Task): void {
         let self = this;
 
         let item = document.createElement('li');
@@ -60,44 +56,32 @@ export default class TaskManager {
         this.tasksListDomEl.appendChild(item);
     }
 
-    /**
-     * @param {Task} el
-     * @return {void} 
-     */
-    doneTask(el) {
-        let elem = el.parentNode;
+    doneTask(el: HTMLElement): void {
+        let elem = (el.parentNode as Element);
         let elemId = elem.id;
 
         elem.classList.toggle('app__list-item--done');
 
         this.storage.done(elemId);
         
-        this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
+        this.doneTasksDomEl.innerHTML = String(this.taskCollection.getDoneTasksCount());
     }
 
-    /**
-     * @param {Task} el
-     * @return {void} 
-     */
-    removeTask(el) {
-        let removeEl = el.parentNode;
+    removeTask(el: HTMLElement) {
+        let removeEl = (el.parentNode as Element);
         let removeElId = removeEl.id;
     
         removeEl.remove();
 
         this.storage.remove(removeElId);
 
-        this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
-        this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
+        this.allTasksDomEl.innerHTML = String(this.taskCollection.getAllTasksCount());
+        this.doneTasksDomEl.innerHTML = String(this.taskCollection.getDoneTasksCount());
     }
 
-    /**
-     * @param {String} el
-     * @return {void} 
-     */
-    addTask(str) {
+    addTask(str: any): void {
         this.createItem(this.storage.create(str));
 
-        this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
+        this.allTasksDomEl.innerHTML = String(this.taskCollection.getAllTasksCount());
     }
 }
