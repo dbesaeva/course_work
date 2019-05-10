@@ -4,13 +4,13 @@ import getStorage from './storage/storage';
 import TaskDomInterface from './task/task-dom-interface';
 import env from './env';
 
-let taskDomElements = {
+let taskDomElements: TaskDomInterface = {
     appList: document.getElementById('app__list'),
     all: document.getElementById('js-all-tasks'),
     done: document.getElementById('js-done-tasks')
 };
 
-let addNewTaskField = document.getElementById('app__task-new');
+let addNewTaskField: HTMLElement = document.getElementById('app__task-new');
 
 let storage = getStorage(env.storage);
 let tasks = storage.getAll();
@@ -32,6 +32,13 @@ addNewTaskField.addEventListener('keyup', function (e) {
     }
 });
 
+document.getElementById('add-btn').addEventListener('click', function (e) {
+    let input = (addNewTaskField as HTMLInputElement);
+
+    taskManager.addTask(input.value);
+    input.value = '';
+});
+
 
 function init(): void {
     let currentTasks = tasks.filter(task => task.state === 'current');
@@ -44,6 +51,6 @@ function init(): void {
         taskManager.createItem(item);
     }
 
-    (taskDomElements as TaskDomInterface).all.innerHTML = String(taskCollection.getAllTasksCount());
-    (taskDomElements as TaskDomInterface).done.innerHTML = String(taskCollection.getDoneTasksCount());
+    taskDomElements.all.innerHTML = String(taskCollection.getAllTasksCount());
+    taskDomElements.done.innerHTML = String(taskCollection.getDoneTasksCount());
 }
