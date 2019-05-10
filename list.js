@@ -1,9 +1,9 @@
 (function () {
-    let tasksList = document.getElementById("app__list");
-    let allTasks = document.getElementById("js-all-tasks");
-    let doneTasks = document.getElementById("js-done-tasks");
+    let tasksListDomEl = document.getElementById("app__list");
+    let allTasksDomEl = document.getElementById("js-all-tasks");
+    let doneTasksDomEl = document.getElementById("js-done-tasks");
     
-        let taskManager = new TaskManager(tasksList, allTasks, doneTasks);
+        let taskManager = new TaskManager(tasksListDomEl, allTasksDomEl, doneTasksDomEl);
 
     let tasks = {
             current: [
@@ -31,8 +31,8 @@
         for (const item of tasks.done) {
             taskManager.createItem(item);
         }
-        allTasks.innerHTML = tasks.allTasksCount;
-        doneTasks.innerHTML = tasks.doneTasksCount;
+        allTasksDomEl.innerHTML = tasks.allTasksCount;
+        doneTasksDomEl.innerHTML = tasks.doneTasksCount;
     }
 
     INIT();
