@@ -2,6 +2,7 @@ import TaskManager from './task/task-manager';
 import TaskCollection from './task/task-collection';
 import getStorage from './storage/storage';
 import TaskDomInterface from './task/task-dom-interface';
+import env from './env';
 
 let taskDomElements = {
     appList: document.getElementById('app__list'),
@@ -9,7 +10,9 @@ let taskDomElements = {
     done: document.getElementById('js-done-tasks')
 };
 
-let storage = getStorage('cookie');
+let addNewTaskField = document.getElementById('app__task-new');
+
+let storage = getStorage(env.storage);
 let tasks = storage.getAll();
 
 let taskManager = new TaskManager(taskDomElements, storage);
@@ -17,8 +20,6 @@ let taskManager = new TaskManager(taskDomElements, storage);
 let taskCollection = new TaskCollection(tasks);
 
 taskManager.setTaskCollection(taskCollection);
-
-let addNewTaskField = document.getElementById('app__task-new');
 
 init();
 

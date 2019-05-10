@@ -1,8 +1,10 @@
 export default class CookieManager {
+    constructor(private expires: any) {}
+
     setCookie(name: string, value: string, options: any): void {
         options = options || {};
 
-        var expires = options.expires;
+        var expires = options.expires || this.expires;
 
         if (typeof expires == 'number' && expires) {
             var d = new Date();

@@ -35,6 +35,6 @@ export default class CookieStorage extends ArrayStorage {
     }
 
     updateCookie(): void {
-        this.cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
+        this.cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {path: '/'});
     }
 }
