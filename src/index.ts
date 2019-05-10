@@ -2,7 +2,7 @@ import TaskManager from './task/task-manager';
 import TaskCollection from './task/task-collection';
 import getStorage from './storage/storage';
 import TaskDomInterface from './task/task-dom-interface';
-import env from './env';
+import env from '../env';
 
 let taskDomElements: TaskDomInterface = {
     appList: document.getElementById('app__list'),
