@@ -1,6 +1,12 @@
 import Task from './task';
 
 export default class TaskManager {
+
+    /**
+     * @param {HTMLElement} tasksListDomEl 
+     * @param {HTMLElement} allTasksDomEl 
+     * @param {HTMLElement} doneTasksDomEl 
+     */
     constructor(tasksListDomEl, allTasksDomEl, doneTasksDomEl) {
         this.tasksListDomEl = tasksListDomEl;
         this.allTasksDomEl = allTasksDomEl;
@@ -8,10 +14,18 @@ export default class TaskManager {
         this.tasks = {};
     }
 
+    /**
+     * @param {Object} tasks
+     * @return {void}
+     */
     setTasks(tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * @param {Task} el
+     * @return {void} 
+     */
     createItem(el) {
         let self = this;
 
@@ -28,7 +42,7 @@ export default class TaskManager {
             self.doneTask(this);
         });
 
-        switch (el.taskState) {
+        switch (el.state) {
             case 'done':
                 item.classList.add('app__list-item', 'app__list-item--done');
                 break;
@@ -43,6 +57,10 @@ export default class TaskManager {
         this.tasksListDomEl.appendChild(item);
     }
 
+    /**
+     * @param {Task} el
+     * @return {void} 
+     */
     doneTask(el) {
         let elem = el.parentNode;
         let elemId = elem.id;
@@ -62,6 +80,10 @@ export default class TaskManager {
         this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
+    /**
+     * @param {Task} el
+     * @return {void} 
+     */
     removeTask(el) {
         let removeEl = el.parentNode;
         let removeElId = removeEl.id;
@@ -79,6 +101,10 @@ export default class TaskManager {
         this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
+    /**
+     * @param {String} el
+     * @return {void} 
+     */
     addTask(str) {
         let self = this;
 
@@ -89,6 +115,9 @@ export default class TaskManager {
         this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
     }
 
+    /**
+     * @return {String}
+     */
     doId() {
         return Math.random().toString(36).substr(2, 16);
     }
