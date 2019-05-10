@@ -3,28 +3,39 @@
     let allTasksDomEl = document.getElementById("js-all-tasks");
     let doneTasksDomEl = document.getElementById("js-done-tasks");
     
-        let taskManager = new TaskManager(tasksListDomEl, allTasksDomEl, doneTasksDomEl);
+    let taskManager = new TaskManager(tasksListDomEl, allTasksDomEl, doneTasksDomEl);
 
     let tasks = {
-            current: [
+        current: [
             new Task(taskManager.doId(), "Задача 1", "current"),
             new Task(taskManager.doId(), "Задача 2", "current")
-            ],
-            done: [
+        ],
+        done: [
             new Task(taskManager.doId(), "Задача 3", "done")
-            ],
-            get allTasksCount() {
-                return this.current.length + this.done.length;
-            },
-            get doneTasksCount() {
-                return this.done.length;
-            }
-        };
+        ],
+        get allTasksCount() {
+            return this.current.length + this.done.length;
+        },
+        get doneTasksCount() {
+            return this.done.length;
+        }
+    };
         
-        taskManager.setTasks(tasks);
-       let addNewTaskField = document.getElementById("app__task-new");
+    taskManager.setTasks(tasks);
 
-    function INIT() {
+    let addNewTaskField = document.getElementById("app__task-new");
+
+    init();
+
+    addNewTaskField.addEventListener('keyup', function (e) {
+        if (e.keyCode === 13) {
+            taskManager.addTask(this.value);
+            this.value = "";
+        }
+    });
+
+
+    function init() {
         for (const item of tasks.current) {
             taskManager.createItem(item);
         }
@@ -34,14 +45,5 @@
         allTasksDomEl.innerHTML = tasks.allTasksCount;
         doneTasksDomEl.innerHTML = tasks.doneTasksCount;
     }
-
-    INIT();
-
-    addNewTaskField.addEventListener('keyup', function (e) {
-        if(e.keyCode === 13) {
-            taskManager.addTasks(this.value);
-            this.value = "";
-        }
-    })
 
 })();

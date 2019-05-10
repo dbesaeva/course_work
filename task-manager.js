@@ -1,6 +1,4 @@
-class TaskManager
-{
-
+class TaskManager {
     constructor(tasksListDomEl, allTasksDomEl, doneTasksDomEl) {
         this.tasksListDomEl = tasksListDomEl;
         this.allTasksDomEl = allTasksDomEl;
@@ -15,9 +13,10 @@ class TaskManager
     createItem(el) {
         let self = this;
 
-        let item = document.createElement('li'),
-            remove = document.createElement('div'),
-            text = document.createElement('span');
+        let item = document.createElement('li');
+        let remove = document.createElement('div');
+        let text = document.createElement('span');
+
         remove.classList.add('app__list-remove');
         remove.addEventListener('click', function () {
             self.removeTask(this);
@@ -26,6 +25,7 @@ class TaskManager
         text.addEventListener('click', function () {
             self.doneTask(this);
         });
+
         switch (el.taskState) {
             case 'done':
                 item.classList.add('app__list-item', 'app__list-item--done');
@@ -33,6 +33,7 @@ class TaskManager
             default:
                 item.classList.add('app__list-item');
         }
+
         item.id = el.id;
         text.innerHTML = el.content;
         item.appendChild(text);
@@ -41,42 +42,48 @@ class TaskManager
     }
 
     doneTask(el) {
-        let elem = el.parentNode,
-            elemId = elem.id,
-            elemState = elem.classList.contains('app__list-item--done');
+        let elem = el.parentNode;
+        let elemId = elem.id;
+        let elemState = elem.classList.contains('app__list-item--done');
 
         const [itemsRemove, itemsAdd] = elemState ? [this.tasks.done, this.tasks.current]
             : [this.tasks.current, this.tasks.done];
 
         elem.classList.toggle('app__list-item--done');
+
         for (const [index, item] of itemsRemove.entries()) {
             if (item.id !== elemId) continue;
             itemsAdd.push(item);
             itemsRemove.splice(index, 1);
         }
+        
         this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
     removeTask(el) {
-        let removeEl = el.parentNode,
-            removeElId = removeEl.id,
-            removeElState = removeEl.classList.contains('app__list-item--done');
+        let removeEl = el.parentNode;
+        let removeElId = removeEl.id;
+        let removeElState = removeEl.classList.contains('app__list-item--done');
     
         removeEl.remove();
         const items = removeElState ? this.tasks.done : this.tasks.current;
+
         for (const [index, item] of items.entries()) {
             if (item.id !== removeElId) continue;
             items.splice(index, 1);
         }
+
         this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
         this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
-    addTasks(str) {
+    addTask(str) {
         let self = this;
+
         let elem = new Task(self.doId(), str, "current");
         this.tasks.current.push(elem);
         self.createItem(elem);
+
         this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
     }
 
