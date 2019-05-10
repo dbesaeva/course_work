@@ -1,4 +1,4 @@
-import Task from '../task';
+import Task from '../task/task';
 import StorageContract from './storage-contract';
 
 let TASKS: any = null;

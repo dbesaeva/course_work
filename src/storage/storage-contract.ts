@@ -1,4 +1,4 @@
-import Task from '../task';
+import Task from '../task/task';
 
 export default interface StorageContract {
     getAll(): Array<Task>;

@@ -1,7 +1,7 @@
-import TaskManager from './task-manager';
-import TaskCollection from './task-collection';
-import getStorage from './storage';
-import TaskDomInterface from './task-dom-interface';
+import TaskManager from './task/task-manager';
+import TaskCollection from './task/task-collection';
+import getStorage from './storage/storage';
+import TaskDomInterface from './task/task-dom-interface';
 
 let taskDomElements = {
     appList: document.getElementById('app__list'),

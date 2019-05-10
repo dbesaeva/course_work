@@ -1,7 +1,7 @@
-import CookieManager from './cookie-manager';
-import ArrayStorage from './storage/array-storage';
-import CookieStorage from './storage/cookie-storage';
-import StorageContract from './storage/storage-contract';
+import CookieManager from '../cookie-manager';
+import ArrayStorage from './array-storage';
+import CookieStorage from './cookie-storage';
+import StorageContract from './storage-contract';
 
 export default function getStorage(storageType: string): StorageContract {
     switch (storageType) {

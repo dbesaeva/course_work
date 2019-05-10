@@ -1,6 +1,6 @@
 import Task from './task';
 import TaskCollection from './task-collection';
-import StorageContract from './storage/storage-contract';
+import StorageContract from '../storage/storage-contract';
 import TaskDomInterface from './task-dom-interface';
 
 export default class TaskManager {
