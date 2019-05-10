@@ -33,8 +33,8 @@ class TaskManager
             default:
                 item.classList.add('app__list-item');
         }
-        item.id = el.taskId;
-        text.innerHTML = el.taskContent;
+        item.id = el.id;
+        text.innerHTML = el.content;
         item.appendChild(text);
         item.appendChild(remove);
         this.tasksListDomEl.appendChild(item);
@@ -45,14 +45,16 @@ class TaskManager
             elemId = elem.id,
             elemState = elem.classList.contains('app__list-item--done');
 
-        const [itemsRemove, itemsAdd] = elemState ? [this.tasks.done, this.tasks.current] : [this.tasks.current, this.tasks.done];
+        const [itemsRemove, itemsAdd] = elemState ? [this.tasks.done, this.tasks.current]
+            : [this.tasks.current, this.tasks.done];
+
         elem.classList.toggle('app__list-item--done');
         for (const [index, item] of itemsRemove.entries()) {
-            if (item.taskId !== elemId) continue;
+            if (item.id !== elemId) continue;
             itemsAdd.push(item);
             itemsRemove.splice(index, 1);
         }
-        this.doneTasksDomEl.innerHTML = tasks.doneTasks;
+        this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
     removeTask(el) {
@@ -63,24 +65,19 @@ class TaskManager
         removeEl.remove();
         const items = removeElState ? this.tasks.done : this.tasks.current;
         for (const [index, item] of items.entries()) {
-            if (item.taskId !== removeElId) continue;
+            if (item.id !== removeElId) continue;
             items.splice(index, 1);
         }
-        this.allTasksDomEl.innerHTML = this.tasks.allTasks;
-        this.doneTasksDomEl.innerHTML = this.tasks.doneTasks;
+        this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
+        this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
     }
 
     addTasks(str) {
         let self = this;
-
-        let elem = {
-            taskId: self.doId(),
-            taskContent: str,
-            taskState: "current"
-        };
+        let elem = new Task(self.doId(), str, "current");
         this.tasks.current.push(elem);
         self.createItem(elem);
-        this.allTasksDomEl.innerHTML = this.tasks.allTasks;
+        this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
     }
 
     doId() {

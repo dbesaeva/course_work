@@ -6,24 +6,17 @@
         let taskManager = new TaskManager(tasksList, allTasks, doneTasks);
 
     let tasks = {
-            current: [{
-                taskId: taskManager.doId(),
-                taskContent: "Задача 1",
-                taskState: "current"
-            }, {
-                taskId: taskManager.doId(),
-                taskContent: "Задача 2",
-                taskState: "current"
-            }],
-            done: [{
-                taskId: taskManager.doId(),
-                taskContent: "Задача 3",
-                taskState: "done"
-            }],
-            get allTasks() {
+            current: [
+            new Task(taskManager.doId(), "Задача 1", "current"),
+            new Task(taskManager.doId(), "Задача 2", "current")
+            ],
+            done: [
+            new Task(taskManager.doId(), "Задача 3", "done")
+            ],
+            get allTasksCount() {
                 return this.current.length + this.done.length;
             },
-            get doneTasks() {
+            get doneTasksCount() {
                 return this.done.length;
             }
         };
@@ -38,8 +31,8 @@
         for (const item of tasks.done) {
             taskManager.createItem(item);
         }
-        allTasks.innerHTML = tasks.allTasks;
-        doneTasks.innerHTML = tasks.doneTasks;
+        allTasks.innerHTML = tasks.allTasksCount;
+        doneTasks.innerHTML = tasks.doneTasksCount;
     }
 
     INIT();
