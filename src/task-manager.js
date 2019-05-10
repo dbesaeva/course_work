@@ -1,4 +1,6 @@
-class TaskManager {
+import Task from './task';
+
+export default class TaskManager {
     constructor(tasksListDomEl, allTasksDomEl, doneTasksDomEl) {
         this.tasksListDomEl = tasksListDomEl;
         this.allTasksDomEl = allTasksDomEl;
