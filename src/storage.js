@@ -1,17 +1,18 @@
 import CookieManager from './cookie-manager';
-import Task from './task';
+import ArrayStorage from './storage/array-storage';
+import CookieStorage from './storage/cookie-storage';
+import StorageContract from './storage/storage-contract';
 
-export default function getStorageTasks(taskManager, storageType) {
+/**
+ * @param {String} storageType
+ * @return {StorageContract} 
+ */
+export default function getStorage(storageType) {
     switch (storageType) {
         case 'array':
-            return [
-                new Task(taskManager.doId(), 'Задача 1', 'current'),
-                new Task(taskManager.doId(), 'Задача 2', 'current'),
-                new Task(taskManager.doId(), 'Задача 3', 'done')
-            ];
+            return new ArrayStorage();
         case 'cookie':
-            const cookieManager = new CookieManager();
-            return cookieManager.hasCookie('tasks') ? JSON.parse(cookieManager.getCookie('tasks')) : [];
+            return new CookieStorage(new CookieManager());
         default:
             throw new Error('Storage does not support this type.');
     }

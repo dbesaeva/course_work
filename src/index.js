@@ -1,7 +1,7 @@
 import TaskManager from './task-manager';
 import CookieManager from './cookie-manager';
 import TaskCollection from './task-collection';
-import getStorageTasks from './storage';
+import getStorage from './storage';
 
 let taskDomElements = {
     appList: document.getElementById('app__list'),
@@ -9,9 +9,10 @@ let taskDomElements = {
     done: document.getElementById('js-done-tasks')
 };
 
-let taskManager = new TaskManager(taskDomElements, new CookieManager());
+let storage = getStorage('cookie');
+let tasks = storage.getAll();
 
-let tasks = getStorageTasks(taskManager, 'cookie');
+let taskManager = new TaskManager(taskDomElements, storage);
 
 let taskCollection = new TaskCollection(tasks);
 

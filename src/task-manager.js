@@ -1,19 +1,19 @@
 import Task from './task';
-import CookieManager from './cookie-manager';
 import TaskCollection from './task-collection';
+import StorageContract from './storage/storage-contract';
 
 export default class TaskManager {
 
     /**
      * @param {Object} taskDomElements 
-     * @param {CookieManager} cookieManager
+     * @param {StorageContract} storage
      */
-    constructor(taskDomElements, cookieManager) {
+    constructor(taskDomElements, storage) {
         this.tasksListDomEl = taskDomElements.appList;
         this.allTasksDomEl = taskDomElements.all;
         this.doneTasksDomEl = taskDomElements.done;
-        this.tasks = {};
-        this.cookieManager = cookieManager;
+        this.tasks = [];
+        this.storage = storage;
     }
 
     /**
@@ -70,17 +70,9 @@ export default class TaskManager {
 
         elem.classList.toggle('app__list-item--done');
 
-        for (const [index, item] of this.tasks.entries()) {
-            if (item.id !== elemId) {
-                continue;
-            }
-
-            item.state = item.state === 'current' ? 'done' : 'current';
-        }
+        this.storage.done(elemId);
         
         this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
-
-        this.updateStorage();
     }
 
     /**
@@ -93,18 +85,10 @@ export default class TaskManager {
     
         removeEl.remove();
 
-        for (const [index, item] of this.tasks.entries()) {
-            if (item.id !== removeElId) {
-                continue;
-            }
-
-            this.tasks.splice(index, 1);
-        }
+        this.storage.remove(removeElId);
 
         this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
         this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
-
-        this.updateStorage();
     }
 
     /**
@@ -112,25 +96,8 @@ export default class TaskManager {
      * @return {void} 
      */
     addTask(str) {
-        let self = this;
-
-        let elem = new Task(self.doId(), str, 'current');
-        this.tasks.push(elem);
-        self.createItem(elem);
+        this.createItem(this.storage.create(str));
 
         this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
-
-        this.updateStorage();
-    }
-
-    /**
-     * @return {String}
-     */
-    doId() {
-        return Math.random().toString(36).substr(2, 16);
-    }
-
-    updateStorage() {
-        this.cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
     }
 }
