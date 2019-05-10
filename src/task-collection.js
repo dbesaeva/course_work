@@ -17,13 +17,13 @@ export default class TaskCollection {
      * @return {Number}
      */
     getAllTasksCount() {
-        return this.tasks.current.length + this.tasks.done.length;
+        return this.tasks.length;
     }
 
     /**
      * @return {Number}
      */
     getDoneTasksCount() {
-        return this.tasks.done.length;
+        return this.tasks.filter(task => task.state === 'done').length;
     }
 }

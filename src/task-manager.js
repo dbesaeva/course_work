@@ -67,21 +67,15 @@ export default class TaskManager {
     doneTask(el) {
         let elem = el.parentNode;
         let elemId = elem.id;
-        let elemState = elem.classList.contains('app__list-item--done');
-
-        const [itemsRemove, itemsAdd] = elemState ? [this.tasks.done, this.tasks.current]
-            : [this.tasks.current, this.tasks.done];
 
         elem.classList.toggle('app__list-item--done');
 
-        for (const [index, item] of itemsRemove.entries()) {
+        for (const [index, item] of this.tasks.entries()) {
             if (item.id !== elemId) {
                 continue;
             }
 
             item.state = item.state === 'current' ? 'done' : 'current';
-            itemsAdd.push(item);
-            itemsRemove.splice(index, 1);
         }
         
         this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
@@ -96,14 +90,15 @@ export default class TaskManager {
     removeTask(el) {
         let removeEl = el.parentNode;
         let removeElId = removeEl.id;
-        let removeElState = removeEl.classList.contains('app__list-item--done');
     
         removeEl.remove();
-        const items = removeElState ? this.tasks.done : this.tasks.current;
 
-        for (const [index, item] of items.entries()) {
-            if (item.id !== removeElId) continue;
-            items.splice(index, 1);
+        for (const [index, item] of this.tasks.entries()) {
+            if (item.id !== removeElId) {
+                continue;
+            }
+
+            this.tasks.splice(index, 1);
         }
 
         this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
@@ -119,8 +114,8 @@ export default class TaskManager {
     addTask(str) {
         let self = this;
 
-        let elem = new Task(self.doId(), str, "current");
-        this.tasks.current.push(elem);
+        let elem = new Task(self.doId(), str, 'current');
+        this.tasks.push(elem);
         self.createItem(elem);
 
         this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();

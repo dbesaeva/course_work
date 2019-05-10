@@ -1,55 +1,42 @@
 import TaskManager from './task-manager';
-import Task from './task';
 import CookieManager from './cookie-manager';
 import TaskCollection from './task-collection';
+import getStorageTasks from './storage';
 
 let taskDomElements = {
-    appList: document.getElementById("app__list"),
-    all: document.getElementById("js-all-tasks"),
-    done: document.getElementById("js-done-tasks")
+    appList: document.getElementById('app__list'),
+    all: document.getElementById('js-all-tasks'),
+    done: document.getElementById('js-done-tasks')
 };
 
-let cookieManager = new CookieManager();
+let taskManager = new TaskManager(taskDomElements, new CookieManager());
 
-let taskManager = new TaskManager(taskDomElements, cookieManager);
-
-let tasks = {};
-
-if (cookieManager.hasCookie('tasks')) {
-    tasks = JSON.parse(cookieManager.getCookie('tasks'));
-} else {
-    tasks = {
-        current: [
-            new Task(taskManager.doId(), "Задача 1", "current"),
-            new Task(taskManager.doId(), "Задача 2", "current")
-        ],
-        done: [
-            new Task(taskManager.doId(), "Задача 3", "done")
-        ]
-    };
-}
+let tasks = getStorageTasks(taskManager, 'cookie');
 
 let taskCollection = new TaskCollection(tasks);
 
 taskManager.setTaskCollection(taskCollection);
 
-let addNewTaskField = document.getElementById("app__task-new");
+let addNewTaskField = document.getElementById('app__task-new');
 
 init();
 
 addNewTaskField.addEventListener('keyup', function (e) {
     if (e.keyCode === 13) {
         taskManager.addTask(this.value);
-        this.value = "";
+        this.value = '';
     }
 });
 
 
 function init() {
-    for (const item of tasks.current) {
+    let currentTasks = tasks.filter(task => task.state === 'current');
+    let doneTasks = tasks.filter(task => task.state === 'done');
+
+    for (const item of currentTasks) {
         taskManager.createItem(item);
     }
-    for (const item of tasks.done) {
+    for (const item of doneTasks) {
         taskManager.createItem(item);
     }
     taskDomElements.all.innerHTML = taskCollection.getAllTasksCount();
