@@ -5,15 +5,15 @@ import TaskCollection from './task-collection';
 export default class TaskManager {
 
     /**
-     * @param {HTMLElement} tasksListDomEl 
-     * @param {HTMLElement} allTasksDomEl 
-     * @param {HTMLElement} doneTasksDomEl 
+     * @param {Object} taskDomElements 
+     * @param {CookieManager} cookieManager
      */
-    constructor(tasksListDomEl, allTasksDomEl, doneTasksDomEl) {
-        this.tasksListDomEl = tasksListDomEl;
-        this.allTasksDomEl = allTasksDomEl;
-        this.doneTasksDomEl = doneTasksDomEl;
+    constructor(taskDomElements, cookieManager) {
+        this.tasksListDomEl = taskDomElements.appList;
+        this.allTasksDomEl = taskDomElements.all;
+        this.doneTasksDomEl = taskDomElements.done;
         this.tasks = {};
+        this.cookieManager = cookieManager;
     }
 
     /**
@@ -136,9 +136,6 @@ export default class TaskManager {
     }
 
     updateStorage() {
-        let cookieManager = new CookieManager();
-        let date = new Date(new Date().getTime() + 60 * 1000);
-
-        cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
+        this.cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
     }
 }

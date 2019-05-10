@@ -3,13 +3,15 @@ import Task from './task';
 import CookieManager from './cookie-manager';
 import TaskCollection from './task-collection';
 
-let tasksListDomEl = document.getElementById("app__list");
-let allTasksDomEl = document.getElementById("js-all-tasks");
-let doneTasksDomEl = document.getElementById("js-done-tasks");
-
-let taskManager = new TaskManager(tasksListDomEl, allTasksDomEl, doneTasksDomEl);
+let taskDomElements = {
+    appList: document.getElementById("app__list"),
+    all: document.getElementById("js-all-tasks"),
+    done: document.getElementById("js-done-tasks")
+};
 
 let cookieManager = new CookieManager();
+
+let taskManager = new TaskManager(taskDomElements, cookieManager);
 
 let tasks = {};
 
@@ -50,6 +52,6 @@ function init() {
     for (const item of tasks.done) {
         taskManager.createItem(item);
     }
-    allTasksDomEl.innerHTML = taskCollection.getAllTasksCount();
-    doneTasksDomEl.innerHTML = taskCollection.getDoneTasksCount();
+    taskDomElements.all.innerHTML = taskCollection.getAllTasksCount();
+    taskDomElements.done.innerHTML = taskCollection.getDoneTasksCount();
 }
