@@ -1,6 +1,7 @@
 import TaskManager from './task-manager';
 import Task from './task';
 import CookieManager from './cookie-manager';
+import TaskCollection from './task-collection';
 
 let tasksListDomEl = document.getElementById("app__list");
 let allTasksDomEl = document.getElementById("js-all-tasks");
@@ -8,23 +9,27 @@ let doneTasksDomEl = document.getElementById("js-done-tasks");
 
 let taskManager = new TaskManager(tasksListDomEl, allTasksDomEl, doneTasksDomEl);
 
-let tasks = {
-    current: [
-        new Task(taskManager.doId(), "Задача 1", "current"),
-        new Task(taskManager.doId(), "Задача 2", "current")
-    ],
-    done: [
-        new Task(taskManager.doId(), "Задача 3", "done")
-    ],
-    get allTasksCount() {
-        return this.current.length + this.done.length;
-    },
-    get doneTasksCount() {
-        return this.done.length;
-    }
-};
-    
-taskManager.setTasks(tasks);
+let cookieManager = new CookieManager();
+
+let tasks = {};
+
+if (cookieManager.hasCookie('tasks')) {
+    tasks = JSON.parse(cookieManager.getCookie('tasks'));
+} else {
+    tasks = {
+        current: [
+            new Task(taskManager.doId(), "Задача 1", "current"),
+            new Task(taskManager.doId(), "Задача 2", "current")
+        ],
+        done: [
+            new Task(taskManager.doId(), "Задача 3", "done")
+        ]
+    };
+}
+
+let taskCollection = new TaskCollection(tasks);
+
+taskManager.setTaskCollection(taskCollection);
 
 let addNewTaskField = document.getElementById("app__task-new");
 
@@ -45,12 +50,6 @@ function init() {
     for (const item of tasks.done) {
         taskManager.createItem(item);
     }
-    allTasksDomEl.innerHTML = tasks.allTasksCount;
-    doneTasksDomEl.innerHTML = tasks.doneTasksCount;
+    allTasksDomEl.innerHTML = taskCollection.getAllTasksCount();
+    doneTasksDomEl.innerHTML = taskCollection.getDoneTasksCount();
 }
-
-
-let cookieManager = new CookieManager();
-
-let date = new Date(new Date().getTime() + 60 * 1000);
-cookieManager.setCookie('mycookie', 'Hello World!', {expires: 60 * 60, path: '/'});

@@ -1,4 +1,6 @@
 import Task from './task';
+import CookieManager from './cookie-manager';
+import TaskCollection from './task-collection';
 
 export default class TaskManager {
 
@@ -15,11 +17,12 @@ export default class TaskManager {
     }
 
     /**
-     * @param {Object} tasks
+     * @param {TaskCollection} taskCollection
      * @return {void}
      */
-    setTasks(tasks) {
-        this.tasks = tasks;
+    setTaskCollection(taskCollection) {
+        this.tasks = taskCollection.getTasks();
+        this.taskCollection = taskCollection;
     }
 
     /**
@@ -72,12 +75,18 @@ export default class TaskManager {
         elem.classList.toggle('app__list-item--done');
 
         for (const [index, item] of itemsRemove.entries()) {
-            if (item.id !== elemId) continue;
+            if (item.id !== elemId) {
+                continue;
+            }
+
+            item.state = item.state === 'current' ? 'done' : 'current';
             itemsAdd.push(item);
             itemsRemove.splice(index, 1);
         }
         
-        this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
+        this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
+
+        this.updateStorage();
     }
 
     /**
@@ -97,8 +106,10 @@ export default class TaskManager {
             items.splice(index, 1);
         }
 
-        this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
-        this.doneTasksDomEl.innerHTML = this.tasks.doneTasksCount;
+        this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
+        this.doneTasksDomEl.innerHTML = this.taskCollection.getDoneTasksCount();
+
+        this.updateStorage();
     }
 
     /**
@@ -112,7 +123,9 @@ export default class TaskManager {
         this.tasks.current.push(elem);
         self.createItem(elem);
 
-        this.allTasksDomEl.innerHTML = this.tasks.allTasksCount;
+        this.allTasksDomEl.innerHTML = this.taskCollection.getAllTasksCount();
+
+        this.updateStorage();
     }
 
     /**
@@ -120,5 +133,12 @@ export default class TaskManager {
      */
     doId() {
         return Math.random().toString(36).substr(2, 16);
+    }
+
+    updateStorage() {
+        let cookieManager = new CookieManager();
+        let date = new Date(new Date().getTime() + 60 * 1000);
+
+        cookieManager.setCookie('tasks', JSON.stringify(this.tasks), {expires: 60 * 60, path: '/'});
     }
 }
