@@ -36,22 +36,18 @@ export default class ArrayStorage implements StorageContract {
     }
 
     remove(id: any): void {
-        for (const [index, item] of this.tasks.entries()) {
-            if (item.id !== id) {
-                continue;
+        this.tasks.forEach((item, index) => {
+            if (item.id === id) {
+                this.tasks.splice(index, 1);
             }
-
-            this.tasks.splice(index, 1);
-        }
+        });
     }
 
     done(id: any): void {
-        for (const [index, item] of this.tasks.entries()) {
-            if (item.id !== id) {
-                continue;
+        this.tasks.forEach(item => {
+            if (item.id === id) {
+                item.state = item.state === 'current' ? 'done' : 'current';
             }
-
-            item.state = item.state === 'current' ? 'done' : 'current';
-        }
+        });
     }
 }
