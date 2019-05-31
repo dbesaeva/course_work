@@ -1,0 +1,17 @@
+sudo: false
+
+language: typescript
+
+typescript: 
+  - 3.5.1
+
+install: 
+  - npm ci
+
+script: 
+  - npm lint
+  - npm run test
+
+notifications: 
+    email: false
+
