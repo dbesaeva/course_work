@@ -1,35 +1,23 @@
 import Task from '../task/task';
 import StorageContract from './storage-contract';
 
-let TASKS: any = null;
-
 export default class ArrayStorage implements StorageContract {
-    protected tasks: Array<Task>;
+    protected tasks: Array<Task> = [];
 
-    constructor() {
-        this.tasks = [];
+    setTasks(tasks: Array<Task>): void {
+        this.tasks = tasks;
     }
 
     getAll(): Array<Task> {
-        if (null === TASKS) {
-            TASKS = [
-                new Task(this.doId(), 'Задача 1', 'current'),
-                new Task(this.doId(), 'Задача 2', 'current'),
-                new Task(this.doId(), 'Задача 3', 'done')
-            ];
-
-            this.tasks = TASKS;
-        }
-
         return this.tasks;
     }
 
-    doId(): string {
+    static doId(): string {
         return Math.random().toString(36).substr(2, 16);
     }
 
     create(str: any): Task {
-        const task = new Task(this.doId(), str, 'current');
+        const task = new Task(ArrayStorage.doId(), str, 'current');
         this.tasks.push(task);
 
         return task;

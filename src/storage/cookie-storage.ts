@@ -2,18 +2,13 @@ import ArrayStorage from './array-storage';
 import CookieManager from '../cookie-manager';
 import Task from '../task/task';
 
-let TASKS: any = null;
-
 export default class CookieStorage extends ArrayStorage {
     constructor(private cookieManager: CookieManager) {
         super();
     }
 
     getAll(): Array<Task> {
-        if (null === TASKS) {
-            TASKS = this.cookieManager.hasCookie('tasks') ? JSON.parse(this.cookieManager.getCookie('tasks')) : [];
-            this.tasks = TASKS;
-        }
+        this.tasks = this.cookieManager.hasCookie('tasks') ? JSON.parse(this.cookieManager.getCookie('tasks')) : [];
 
         return this.tasks;
     }
